@@ -15,7 +15,7 @@ in a development environment before using in production.
 
 ## About 
 
-![alt text](./PageListFilter.jpg "Title")
+![Screenshot of PageListFilter](PageListFilter.jpg)
 
 This module enables you to have filter actions for children of pages that you define in the
 module settings. This enables you to click and show just pages that start with a specific 
