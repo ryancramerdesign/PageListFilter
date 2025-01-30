@@ -1,0 +1,8 @@
+.PageList .PageListActionFilter:not(.PageListActionFilterActive) > a {
+	background-color: #f0f3f7;
+	color: #354b60;
+	font-weight: normal;
+}
+.PageList .PageListActionFilter:not(.PageListActionFilterActive) > a:hover {
+	background-color: #cbdaed;
+}
