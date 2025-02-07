@@ -91,12 +91,12 @@ class PageListFilter extends WireData implements Module, ConfigurableModule {
 		$prefixes = [];
 		$sql = [];
 		$table = $field instanceof Field ? $field->getTable() : 'pages';
+		$languages = $this->wire()->languages;
+		$language = $languages ? $this->wire()->user->language : null; 
 
 		if($field === 'name') {
-			$languages = $this->wire()->languages;
-			if($languages && $languages->hasPageNames()) {
-				$lid = $this->wire()->user->language->id;
-				$sql[] = "SELECT SUBSTRING(pages.name, 1, 1) AS prefix1, SUBSTRING(pages.name$lid, 0, 1) AS prefix2";
+			if($languages && $languages->hasPageNames() && !$language->isDefault()) {
+				$sql[] = "SELECT SUBSTRING(pages.name, 1, 1) AS prefix1, SUBSTRING(pages.name$language, 0, 1) AS prefix2";
 			} else {
 				$sql[] = "SELECT DISTINCT SUBSTRING(pages.name, 1, 1) AS prefix";
 			}
@@ -104,9 +104,8 @@ class PageListFilter extends WireData implements Module, ConfigurableModule {
 		} else if($field->type instanceof FieldtypeText) {
 			$sql[] = "SELECT DISTINCT SUBSTRING($table.data, 1, 1) AS prefix";
 			
-		} else if($this->wire()->languages && wireInstanceOf($field->type, 'FieldtypeTextLanguage')) {
-			$lid = $this->wire()->user->language->id;
-			$sql[] = "SELECT SUBSTRING($table.data, 1, 1) AS prefix1, SUBSTRING($table.data$lid, 0, 1) AS prefix2";
+		} else if($language && !$language->isDefault() && wireInstanceOf($field->type, 'FieldtypeTextLanguage')) {
+			$sql[] = "SELECT SUBSTRING($table.data, 1, 1) AS prefix1, SUBSTRING($table.data$language, 0, 1) AS prefix2";
 		}
 		
 		if($sql) {
